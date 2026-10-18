@@ -76,7 +76,7 @@ Pretrained weights should be linked here when released.
 
 | RICE-I  | [Baidu Netdisk (code: vw3e)](https://pan.baidu.com/s/1t76YSQwzGBzro25GW1tmaQ?pwd=vw3e) |  
 | RICE-II | [Baidu Netdisk (code: qfep)](https://pan.baidu.com/s/18JmpMt4wOwdyKUidX0q0OQ?pwd=qfep) |
-| T-CLOUD | [Baidu Netdisk (code: phm4)](https://pan.baidu.com/s/1ffDq59h2qcfakLmiJXEOwg?pwd=phm4)
+| T-CLOUD | [Baidu Netdisk (code: phm4)](https://pan.baidu.com/s/1ffDq59h2qcfakLmiJXEOwg?pwd=phm4)|
 
 | Dataset | Pretrained weights                                                                       |
 | ------- | ---------------------------------------------------------------------------------------- |
