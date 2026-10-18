@@ -74,9 +74,9 @@ Download and organize the datasets according to the directory structure expected
 
 Pretrained weights should be linked here when released.
 
-| RICE-I  | [Baidu Netdisk (code: yg1a)](https://pan.baidu.com/s/1oK_UyIMFdLFq7MzsaRBa_A?pwd=yg1a) |  
-| RICE-II | [Baidu Netdisk (code: ngke)](https://pan.baidu.com/s/1rLhQ41Qli23L_D0H8nI2vA?pwd=ngke) |  
-| T-CLOUD | [Baidu Netdisk (code: ebmg)](https://pan.baidu.com/s/10VyNIwJDyGNSoqE0UlDAvA?pwd=ebmg) |
+| RICE-I  | [Baidu Netdisk (code: vw3e)](https://pan.baidu.com/s/1t76YSQwzGBzro25GW1tmaQ?pwd=vw3e) |  
+| RICE-II | [Baidu Netdisk (code: qfep)](https://pan.baidu.com/s/18JmpMt4wOwdyKUidX0q0OQ?pwd=qfep) |
+| T-CLOUD | [Baidu Netdisk (code: phm4)](https://pan.baidu.com/s/1ffDq59h2qcfakLmiJXEOwg?pwd=phm4)
 
 | Dataset | Pretrained weights                                                                       |
 | ------- | ---------------------------------------------------------------------------------------- |
