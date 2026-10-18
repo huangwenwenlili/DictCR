@@ -2,7 +2,7 @@
 
 Wenli Huang, Yang Wu, Sanping Zhou, Xiaomeng Xin, Xiaobo Jia, Ping Yu, Ye Deng, 2026
 
-![Paper](https://img.shields.io/badge/Paper-Pattern%20Recognition-blue)
+![Paper](![Paper](figs/DictCR-PR.pdf)
 
 ## Abstract
 
