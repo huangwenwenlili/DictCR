@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python  test/test.py --opt ./cloud_removal_opt/T-cloud-dict.yml --weights experiments/T-cloud/net_T-cloud_best.pth --input_dir datasets/T-Cloud/test/cloud  --input_truth_dir datasets/T-Cloud/test/reference/ --result_dir output/T-cloud-test

@@ -1,0 +1,788 @@
+2024-12-08 23:17:31,692 INFO: 
+                ____                _       _____  ____
+               / __ ) ____ _ _____ (_)_____/ ___/ / __ \
+              / __  |/ __ `// ___// // ___/\__ \ / /_/ /
+             / /_/ // /_/ /(__  )/ // /__ ___/ // _, _/
+            /_____/ \__,_//____//_/ \___//____//_/ |_|
+     ______                   __   __                 __      __
+    / ____/____   ____   ____/ /  / /   __  __ _____ / /__   / /
+   / / __ / __ \ / __ \ / __  /  / /   / / / // ___// //_/  / /
+  / /_/ // /_/ // /_/ // /_/ /  / /___/ /_/ // /__ / /<    /_/
+  \____/ \____/ \____/ \____/  /_____/\____/ \___//_/|_|  (_)
+    
+Version Information: 
+	BasicSR: 1.2.0+10018c6
+	PyTorch: 2.4.1+cu121
+	TorchVision: 0.19.1+cu121
+2024-12-08 23:17:31,693 INFO: 
+  name: rice2_dict_tiny_new1_tokens128
+  model_type: ImageCleanModel
+  scale: 1
+  num_gpu: 1
+  manual_seed: 100
+  datasets:[
+    train:[
+      name: TrainSet
+      type: Dataset_PairedImage
+      dataroot_gt: /work/home/dengye/hwl/datasets/cloud/clound-wy/RICE2/train/reference
+      dataroot_lq: /work/home/dengye/hwl/datasets/cloud/clound-wy/RICE2/train/cloud
+      geometric_augs: True
+      filename_tmpl: {}
+      io_backend:[
+        type: disk
+      ]
+      use_shuffle: True
+      num_worker_per_gpu: 8
+      batch_size_per_gpu: 16
+      mini_batch_sizes: [16]
+      iters: [37000]
+      gt_size: 256
+      gt_sizes: [256]
+      dataset_enlarge_ratio: 1
+      prefetch_mode: None
+      phase: train
+      scale: 1
+    ]
+    val:[
+      name: ValSet
+      type: Dataset_PairedImage
+      dataroot_gt: /work/home/dengye/hwl/datasets/cloud/clound-wy/RICE2/test/reference
+      dataroot_lq: /work/home/dengye/hwl/datasets/cloud/clound-wy/RICE2/test/cloud
+      gt_size: 256
+      io_backend:[
+        type: disk
+      ]
+      phase: val
+      scale: 1
+    ]
+  ]
+  network_g:[
+    type: Restormer
+    inp_channels: 3
+    out_channels: 3
+    dim: 48
+    num_blocks: [1, 2, 8, 2, 1]
+    heads: [2, 2, 8, 2, 2]
+    split_size: [8, 32]
+    num_tokens: [128, 128, 128]
+    ffn_expansion_factor: 2.66
+    bias: False
+    LayerNorm_type: WithBias
+  ]
+  path:[
+    pretrain_network_g: None
+    strict_load_g: True
+    resume_state: None
+    root: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens
+    experiments_root: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens/experiments/rice2_dict_tiny_new1_tokens128
+    models: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens/experiments/rice2_dict_tiny_new1_tokens128/models
+    training_states: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens/experiments/rice2_dict_tiny_new1_tokens128/training_states
+    log: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens/experiments/rice2_dict_tiny_new1_tokens128
+    visualization: /work/home/dengye/hwl/code/cloud-train/Restormer-strip-dict-restormerFFN-tiny-20241208-A800sc-128tokens/experiments/rice2_dict_tiny_new1_tokens128/visualization
+  ]
+  train:[
+    total_iter: 37000
+    warmup_iter: -1
+    use_grad_clip: True
+    scheduler:[
+      type: CosineAnnealingRestartCyclicLR
+      periods: [11100, 25900]
+      restart_weights: [1, 1]
+      eta_mins: [0.0004, 2e-06]
+    ]
+    mixing_augs:[
+      mixup: False
+      mixup_beta: 1.2
+      use_identity: True
+    ]
+    optim_g:[
+      type: AdamW
+      lr: 0.0004
+      weight_decay: 0.0001
+      betas: [0.9, 0.999]
+    ]
+    pixel_opt:[
+      type: L1Loss
+      loss_weight: 1
+      reduction: mean
+    ]
+  ]
+  val:[
+    window_size: 8
+    val_freq: 1000.0
+    save_img: False
+    rgb2bgr: True
+    use_image: True
+    max_minibatch: 4
+    metrics:[
+      psnr:[
+        type: calculate_psnr
+        crop_border: 0
+        test_y_channel: False
+      ]
+      ssim:[
+        type: calculate_ssim
+        crop_border: 0
+        test_y_channel: False
+      ]
+    ]
+  ]
+  logger:[
+    print_freq: 1000
+    save_checkpoint_freq: 1000.0
+    use_tb_logger: True
+    wandb:[
+      project: None
+      resume_id: None
+    ]
+  ]
+  dist_params:[
+    backend: nccl
+    port: 29500
+  ]
+  is_train: True
+  dist: False
+  rank: 0
+  world_size: 1
+
+2024-12-08 23:18:09,690 INFO: Dataset Dataset_PairedImage - TrainSet is created.
+2024-12-08 23:18:09,703 INFO: Training statistics:
+	Number of train images: 588
+	Dataset enlarge ratio: 1
+	Batch size per gpu: 16
+	World size (gpu number): 1
+	Require iter number per epoch: 37
+	Total epochs: 1000; iters: 37000.
+2024-12-08 23:18:09,718 INFO: Dataset Dataset_PairedImage - ValSet is created.
+2024-12-08 23:18:09,719 INFO: Number of val images/folders in ValSet: 148
+2024-12-08 23:18:12,075 INFO: Network: Restormer, with parameters: 5,930,540
+2024-12-08 23:18:12,076 INFO: Restormer(
+  (patch_embed): OverlapPatchEmbed(
+    (proj): Conv2d(3, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+  )
+  (encoder_level1): TransformerBlock(
+    (blocks): ModuleList(
+      (0): Window_Attn(
+        (norm1): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((48,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=48, out_features=144, bias=True)
+          (proj): Linear(in_features=48, out_features=48, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=1, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((1,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=1, out_features=1, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((1,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=1, out_features=1, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((1,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=1, out_features=1, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(48, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=48)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(48, 254, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(254, 254, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=254, bias=False)
+          (project_out): Conv2d(127, 48, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+  )
+  (down1_2): Downsample(
+    (body): Sequential(
+      (0): Conv2d(48, 24, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelUnshuffle(downscale_factor=2)
+    )
+  )
+  (encoder_level2): TransformerBlock(
+    (blocks): ModuleList(
+      (0): Window_Attn(
+        (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=96, out_features=288, bias=True)
+          (proj): Linear(in_features=96, out_features=96, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=3, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=1, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(96, 96, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=96)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=96, out_features=96, bias=True)
+            (wk): Linear(in_features=96, out_features=96, bias=True)
+            (wv): Linear(in_features=96, out_features=96, bias=True)
+            (proj): Linear(in_features=96, out_features=96, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=96, out_features=96, bias=True)
+          (wk): Linear(in_features=96, out_features=96, bias=True)
+          (wv): Linear(in_features=96, out_features=96, bias=True)
+          (proj): Linear(in_features=96, out_features=96, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+  )
+  (down2_3): Downsample(
+    (body): Sequential(
+      (0): Conv2d(96, 48, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelUnshuffle(downscale_factor=2)
+    )
+  )
+  (encoder_level3): TransformerBlock(
+    (blocks): ModuleList(
+      (0): Window_Attn(
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=192, out_features=576, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=6, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=4, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(192, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=192)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=192, out_features=192, bias=True)
+            (wk): Linear(in_features=192, out_features=192, bias=True)
+            (wv): Linear(in_features=192, out_features=192, bias=True)
+            (proj): Linear(in_features=192, out_features=192, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=192, out_features=192, bias=True)
+          (wk): Linear(in_features=192, out_features=192, bias=True)
+          (wv): Linear(in_features=192, out_features=192, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (2): Window_Attn(
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=192, out_features=576, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=6, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=4, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(192, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=192)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (3): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=192, out_features=192, bias=True)
+            (wk): Linear(in_features=192, out_features=192, bias=True)
+            (wv): Linear(in_features=192, out_features=192, bias=True)
+            (proj): Linear(in_features=192, out_features=192, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=192, out_features=192, bias=True)
+          (wk): Linear(in_features=192, out_features=192, bias=True)
+          (wv): Linear(in_features=192, out_features=192, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (4): Window_Attn(
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=192, out_features=576, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=6, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=4, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(192, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=192)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (5): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=192, out_features=192, bias=True)
+            (wk): Linear(in_features=192, out_features=192, bias=True)
+            (wv): Linear(in_features=192, out_features=192, bias=True)
+            (proj): Linear(in_features=192, out_features=192, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=192, out_features=192, bias=True)
+          (wk): Linear(in_features=192, out_features=192, bias=True)
+          (wv): Linear(in_features=192, out_features=192, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (6): Window_Attn(
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=192, out_features=576, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=6, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=6, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((6,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=6, out_features=4, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(192, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=192)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (7): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((192,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=192, out_features=192, bias=True)
+            (wk): Linear(in_features=192, out_features=192, bias=True)
+            (wv): Linear(in_features=192, out_features=192, bias=True)
+            (proj): Linear(in_features=192, out_features=192, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=192, out_features=192, bias=True)
+          (wk): Linear(in_features=192, out_features=192, bias=True)
+          (wv): Linear(in_features=192, out_features=192, bias=True)
+          (proj): Linear(in_features=192, out_features=192, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(192, 1020, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(1020, 1020, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=1020, bias=False)
+          (project_out): Conv2d(510, 192, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+  )
+  (up3_2): Upsample(
+    (body): Sequential(
+      (0): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (reduce_chan_level2): Conv2d(192, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+  (decoder_level2): TransformerBlock(
+    (blocks): ModuleList(
+      (0): Window_Attn(
+        (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=96, out_features=288, bias=True)
+          (proj): Linear(in_features=96, out_features=96, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=3, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=1, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(96, 96, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=96)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+      (1): ATD_Attn(
+        (softmax): Softmax(dim=-1)
+        (lrelu): LeakyReLU(negative_slope=0.01)
+        (sigmoid): Sigmoid()
+        (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (attn_atd): ATD_CA(
+          (Dict_SA): Dict_SA(
+            (wq): Linear(in_features=96, out_features=96, bias=True)
+            (wk): Linear(in_features=96, out_features=96, bias=True)
+            (wv): Linear(in_features=96, out_features=96, bias=True)
+            (proj): Linear(in_features=96, out_features=96, bias=True)
+            (softmax): Softmax(dim=-1)
+          )
+          (wq): Linear(in_features=96, out_features=96, bias=True)
+          (wk): Linear(in_features=96, out_features=96, bias=True)
+          (wv): Linear(in_features=96, out_features=96, bias=True)
+          (proj): Linear(in_features=96, out_features=96, bias=True)
+          (softmax): Softmax(dim=-1)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+  )
+  (up2_1): Upsample(
+    (body): Sequential(
+      (0): Conv2d(96, 192, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+      (1): PixelShuffle(upscale_factor=2)
+    )
+  )
+  (decoder_level1): TransformerBlock(
+    (blocks): ModuleList(
+      (0): Window_Attn(
+        (norm1): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (norm2): LayerNorm((96,), eps=1e-05, elementwise_affine=True)
+        (attn): L_SA(
+          (qkv): Linear(in_features=96, out_features=288, bias=True)
+          (proj): Linear(in_features=96, out_features=96, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+          (attns): ModuleList(
+            (0-1): 2 x WindowAttention(
+              (pos): DynamicPosBias(
+                (pos_proj): Linear(in_features=2, out_features=3, bias=True)
+                (pos1): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos2): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=3, bias=True)
+                )
+                (pos3): Sequential(
+                  (0): LayerNorm((3,), eps=1e-05, elementwise_affine=True)
+                  (1): ReLU(inplace=True)
+                  (2): Linear(in_features=3, out_features=1, bias=True)
+                )
+              )
+              (attn_drop): Dropout(p=0.0, inplace=False)
+            )
+          )
+          (get_v): Conv2d(96, 96, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=96)
+        )
+        (ffn): FeedForward(
+          (project_in): Conv2d(96, 510, kernel_size=(1, 1), stride=(1, 1), bias=False)
+          (dwconv): Conv2d(510, 510, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), groups=510, bias=False)
+          (project_out): Conv2d(255, 96, kernel_size=(1, 1), stride=(1, 1), bias=False)
+        )
+      )
+    )
+  )
+  (output): Conv2d(96, 3, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False)
+)
+2024-12-08 23:18:12,080 INFO: Model [ImageCleanModel] is created.
+2024-12-08 23:18:12,296 INFO: Start training from epoch: 0, iter: 0
+2024-12-08 23:18:13,395 INFO: 
+ Updating Patch_Size to 256 and Batch_Size to 16 
+
+2024-12-08 23:33:44,033 INFO: [rice2..][epoch: 27, iter:   1,000, lr:(4.000e-04,)] [eta: 9:18:34, time (data): 0.898 (0.002)] l_pix: 3.6513e-02 
+2024-12-08 23:33:44,139 INFO: Saving models and training states.
+2024-12-08 23:34:07,082 INFO: Validation ValSet,		 # psnr: 28.5345	 # ssim: 0.8986
+2024-12-08 23:49:24,495 INFO: [rice2..][epoch: 55, iter:   2,000, lr:(4.000e-04,)] [eta: 9:05:49, time (data): 0.897 (0.001)] l_pix: 2.7407e-02 
+2024-12-08 23:49:24,513 INFO: Saving models and training states.
+2024-12-08 23:49:36,485 INFO: Validation ValSet,		 # psnr: 30.5557	 # ssim: 0.9265
+2024-12-09 00:04:55,283 INFO: [rice2..][epoch: 83, iter:   3,000, lr:(4.000e-04,)] [eta: 8:49:17, time (data): 0.895 (0.000)] l_pix: 2.1857e-02 
+2024-12-09 00:04:55,386 INFO: Saving models and training states.
+2024-12-09 00:05:08,426 INFO: Validation ValSet,		 # psnr: 31.7129	 # ssim: 0.9366
+2024-12-09 00:20:33,343 INFO: [rice2..][epoch:111, iter:   4,000, lr:(4.000e-04,)] [eta: 8:34:16, time (data): 0.899 (0.002)] l_pix: 2.2287e-02 
+2024-12-09 00:20:33,471 INFO: Saving models and training states.
+2024-12-09 00:20:52,438 INFO: Validation ValSet,		 # psnr: 32.7851	 # ssim: 0.9463
+2024-12-09 00:36:11,032 INFO: [rice2..][epoch:138, iter:   5,000, lr:(4.000e-04,)] [eta: 8:18:58, time (data): 0.900 (0.001)] l_pix: 1.7701e-02 
+2024-12-09 00:36:11,170 INFO: Saving models and training states.
+2024-12-09 00:36:30,943 INFO: Validation ValSet,		 # psnr: 32.4003	 # ssim: 0.9492
+2024-12-09 00:51:48,969 INFO: [rice2..][epoch:166, iter:   6,000, lr:(4.000e-04,)] [eta: 8:03:34, time (data): 0.901 (0.001)] l_pix: 2.3135e-02 
+2024-12-09 00:51:49,176 INFO: Saving models and training states.
+2024-12-09 00:52:09,000 INFO: Validation ValSet,		 # psnr: 33.7358	 # ssim: 0.9529
+2024-12-09 01:07:28,486 INFO: [rice2..][epoch:194, iter:   7,000, lr:(4.000e-04,)] [eta: 7:48:13, time (data): 0.898 (0.000)] l_pix: 1.6523e-02 
+2024-12-09 01:07:28,667 INFO: Saving models and training states.
+2024-12-09 01:07:49,194 INFO: Validation ValSet,		 # psnr: 33.9318	 # ssim: 0.9539
+2024-12-09 01:23:09,743 INFO: [rice2..][epoch:222, iter:   8,000, lr:(4.000e-04,)] [eta: 7:32:54, time (data): 0.899 (0.001)] l_pix: 1.3850e-02 
+2024-12-09 01:23:09,862 INFO: Saving models and training states.
+2024-12-09 01:23:29,475 INFO: Validation ValSet,		 # psnr: 33.8000	 # ssim: 0.9549
+2024-12-09 01:38:48,858 INFO: [rice2..][epoch:249, iter:   9,000, lr:(4.000e-04,)] [eta: 7:17:23, time (data): 0.896 (0.001)] l_pix: 2.1812e-02 
+2024-12-09 01:38:49,004 INFO: Saving models and training states.
+2024-12-09 01:39:09,584 INFO: Validation ValSet,		 # psnr: 34.4637	 # ssim: 0.9580
+2024-12-09 01:54:28,675 INFO: [rice2..][epoch:277, iter:  10,000, lr:(4.000e-04,)] [eta: 7:01:53, time (data): 0.897 (0.001)] l_pix: 1.5871e-02 
+2024-12-09 01:54:28,867 INFO: Saving models and training states.
+2024-12-09 01:54:48,703 INFO: Validation ValSet,		 # psnr: 35.2471	 # ssim: 0.9592
+2024-12-09 02:10:09,774 INFO: [rice2..][epoch:305, iter:  11,000, lr:(4.000e-04,)] [eta: 6:46:24, time (data): 0.901 (0.001)] l_pix: 2.1156e-02 
+2024-12-09 02:10:09,931 INFO: Saving models and training states.
+2024-12-09 02:10:30,254 INFO: Validation ValSet,		 # psnr: 34.9554	 # ssim: 0.9556
+2024-12-09 02:25:50,676 INFO: [rice2..][epoch:333, iter:  12,000, lr:(3.988e-04,)] [eta: 6:30:52, time (data): 0.897 (0.000)] l_pix: 1.5718e-02 
+2024-12-09 02:25:50,844 INFO: Saving models and training states.
+2024-12-09 02:26:11,916 INFO: Validation ValSet,		 # psnr: 34.6387	 # ssim: 0.9595
+2024-12-09 02:41:32,856 INFO: [rice2..][epoch:361, iter:  13,000, lr:(3.947e-04,)] [eta: 6:15:21, time (data): 0.899 (0.000)] l_pix: 1.3512e-02 
+2024-12-09 02:41:32,998 INFO: Saving models and training states.
+2024-12-09 02:41:53,380 INFO: Validation ValSet,		 # psnr: 35.1631	 # ssim: 0.9600
+2024-12-09 02:57:11,602 INFO: [rice2..][epoch:388, iter:  14,000, lr:(3.878e-04,)] [eta: 5:59:43, time (data): 0.898 (0.001)] l_pix: 9.8924e-03 
+2024-12-09 02:57:11,726 INFO: Saving models and training states.
+2024-12-09 02:57:31,930 INFO: Validation ValSet,		 # psnr: 35.1590	 # ssim: 0.9604
+2024-12-09 03:12:52,030 INFO: [rice2..][epoch:416, iter:  15,000, lr:(3.782e-04,)] [eta: 5:44:08, time (data): 0.900 (0.001)] l_pix: 1.7940e-02 
+2024-12-09 03:12:52,139 INFO: Saving models and training states.
+2024-12-09 03:13:07,291 INFO: Validation ValSet,		 # psnr: 35.4173	 # ssim: 0.9612
+2024-12-09 03:28:29,024 INFO: [rice2..][epoch:444, iter:  16,000, lr:(3.659e-04,)] [eta: 5:28:27, time (data): 0.898 (0.000)] l_pix: 1.3695e-02 
+2024-12-09 03:28:29,180 INFO: Saving models and training states.
+2024-12-09 03:28:49,546 INFO: Validation ValSet,		 # psnr: 35.6540	 # ssim: 0.9621
+2024-12-09 03:44:11,855 INFO: [rice2..][epoch:472, iter:  17,000, lr:(3.512e-04,)] [eta: 5:12:54, time (data): 0.898 (0.000)] l_pix: 1.0860e-02 
+2024-12-09 03:44:12,065 INFO: Saving models and training states.
+2024-12-09 03:44:26,030 INFO: Validation ValSet,		 # psnr: 35.7056	 # ssim: 0.9596
+2024-12-09 03:59:49,819 INFO: [rice2..][epoch:499, iter:  18,000, lr:(3.343e-04,)] [eta: 4:57:14, time (data): 0.897 (0.001)] l_pix: 1.5557e-02 
+2024-12-09 03:59:49,970 INFO: Saving models and training states.
+2024-12-09 04:00:03,616 INFO: Validation ValSet,		 # psnr: 34.8644	 # ssim: 0.9597
+2024-12-09 04:15:34,607 INFO: [rice2..][epoch:527, iter:  19,000, lr:(3.154e-04,)] [eta: 4:41:41, time (data): 0.898 (0.001)] l_pix: 1.0812e-02 
+2024-12-09 04:15:34,762 INFO: Saving models and training states.
+2024-12-09 04:15:48,514 INFO: Validation ValSet,		 # psnr: 36.1575	 # ssim: 0.9632
+2024-12-09 04:31:17,148 INFO: [rice2..][epoch:555, iter:  20,000, lr:(2.949e-04,)] [eta: 4:26:05, time (data): 0.899 (0.002)] l_pix: 1.7276e-02 
+2024-12-09 04:31:17,247 INFO: Saving models and training states.
+2024-12-09 04:31:30,578 INFO: Validation ValSet,		 # psnr: 36.1365	 # ssim: 0.9642
+2024-12-09 04:47:00,097 INFO: [rice2..][epoch:583, iter:  21,000, lr:(2.730e-04,)] [eta: 4:10:29, time (data): 0.897 (0.001)] l_pix: 1.4273e-02 
+2024-12-09 04:47:00,246 INFO: Saving models and training states.
+2024-12-09 04:47:13,257 INFO: Validation ValSet,		 # psnr: 36.3091	 # ssim: 0.9646
+2024-12-09 05:02:46,445 INFO: [rice2..][epoch:611, iter:  22,000, lr:(2.500e-04,)] [eta: 3:54:54, time (data): 0.902 (0.004)] l_pix: 1.2320e-02 
+2024-12-09 05:02:46,581 INFO: Saving models and training states.
+2024-12-09 05:03:00,409 INFO: Validation ValSet,		 # psnr: 36.2563	 # ssim: 0.9640
+2024-12-09 05:18:31,638 INFO: [rice2..][epoch:638, iter:  23,000, lr:(2.263e-04,)] [eta: 3:39:18, time (data): 0.899 (0.001)] l_pix: 1.3221e-02 
+2024-12-09 05:18:31,756 INFO: Saving models and training states.
+2024-12-09 05:18:45,021 INFO: Validation ValSet,		 # psnr: 36.3182	 # ssim: 0.9650
+2024-12-09 05:34:14,670 INFO: [rice2..][epoch:666, iter:  24,000, lr:(2.022e-04,)] [eta: 3:23:39, time (data): 0.899 (0.001)] l_pix: 9.4508e-03 
+2024-12-09 05:34:14,823 INFO: Saving models and training states.
+2024-12-09 05:34:30,245 INFO: Validation ValSet,		 # psnr: 36.7049	 # ssim: 0.9653
+2024-12-09 05:49:57,845 INFO: [rice2..][epoch:694, iter:  25,000, lr:(1.781e-04,)] [eta: 3:08:01, time (data): 0.897 (0.000)] l_pix: 1.0250e-02 
+2024-12-09 05:49:57,998 INFO: Saving models and training states.
+2024-12-09 05:50:12,180 INFO: Validation ValSet,		 # psnr: 36.7145	 # ssim: 0.9656
+2024-12-09 06:05:50,476 INFO: [rice2..][epoch:722, iter:  26,000, lr:(1.544e-04,)] [eta: 2:52:26, time (data): 0.898 (0.000)] l_pix: 1.2009e-02 
+2024-12-09 06:05:50,574 INFO: Saving models and training states.
+2024-12-09 06:06:03,255 INFO: Validation ValSet,		 # psnr: 36.5564	 # ssim: 0.9652
+2024-12-09 06:21:48,820 INFO: [rice2..][epoch:749, iter:  27,000, lr:(1.313e-04,)] [eta: 2:36:52, time (data): 0.898 (0.001)] l_pix: 1.4860e-02 
+2024-12-09 06:21:48,939 INFO: Saving models and training states.
+2024-12-09 06:22:02,082 INFO: Validation ValSet,		 # psnr: 36.8792	 # ssim: 0.9656
+2024-12-09 06:37:51,869 INFO: [rice2..][epoch:777, iter:  28,000, lr:(1.093e-04,)] [eta: 2:21:17, time (data): 0.914 (0.006)] l_pix: 1.1338e-02 
+2024-12-09 06:37:51,973 INFO: Saving models and training states.
+2024-12-09 06:38:07,255 INFO: Validation ValSet,		 # psnr: 36.8570	 # ssim: 0.9659
+2024-12-09 06:53:54,687 INFO: [rice2..][epoch:805, iter:  29,000, lr:(8.859e-05,)] [eta: 2:05:41, time (data): 0.897 (0.001)] l_pix: 9.6765e-03 
+2024-12-09 06:53:54,842 INFO: Saving models and training states.
+2024-12-09 06:54:07,621 INFO: Validation ValSet,		 # psnr: 36.8365	 # ssim: 0.9660
+2024-12-09 07:09:55,910 INFO: [rice2..][epoch:833, iter:  30,000, lr:(6.954e-05,)] [eta: 1:50:03, time (data): 0.900 (0.000)] l_pix: 8.2391e-03 
+2024-12-09 07:09:56,016 INFO: Saving models and training states.
+2024-12-09 07:10:09,349 INFO: Validation ValSet,		 # psnr: 37.1529	 # ssim: 0.9665
+2024-12-09 07:26:03,496 INFO: [rice2..][epoch:861, iter:  31,000, lr:(5.243e-05,)] [eta: 1:34:24, time (data): 0.896 (0.000)] l_pix: 8.0481e-03 
+2024-12-09 07:26:03,666 INFO: Saving models and training states.
+2024-12-09 07:26:16,668 INFO: Validation ValSet,		 # psnr: 37.0988	 # ssim: 0.9666
+2024-12-09 07:42:09,516 INFO: [rice2..][epoch:888, iter:  32,000, lr:(3.750e-05,)] [eta: 1:18:43, time (data): 0.898 (0.001)] l_pix: 1.1109e-02 
+2024-12-09 07:42:09,696 INFO: Saving models and training states.
+2024-12-09 07:42:23,103 INFO: Validation ValSet,		 # psnr: 37.1447	 # ssim: 0.9666
+2024-12-09 07:58:15,992 INFO: [rice2..][epoch:916, iter:  33,000, lr:(2.498e-05,)] [eta: 1:03:01, time (data): 0.899 (0.001)] l_pix: 1.1273e-02 
+2024-12-09 07:58:16,097 INFO: Saving models and training states.
+2024-12-09 07:58:31,144 INFO: Validation ValSet,		 # psnr: 37.2625	 # ssim: 0.9668
+2024-12-09 08:14:21,291 INFO: [rice2..][epoch:944, iter:  34,000, lr:(1.504e-05,)] [eta: 0:47:17, time (data): 0.899 (0.000)] l_pix: 1.1298e-02 
+2024-12-09 08:14:21,477 INFO: Saving models and training states.
+2024-12-09 08:14:34,392 INFO: Validation ValSet,		 # psnr: 37.1868	 # ssim: 0.9668
+2024-12-09 08:30:24,867 INFO: [rice2..][epoch:972, iter:  35,000, lr:(7.833e-06,)] [eta: 0:31:32, time (data): 2.388 (0.000)] l_pix: 8.2673e-03 
+2024-12-09 08:30:25,003 INFO: Saving models and training states.
+2024-12-09 08:30:38,144 INFO: Validation ValSet,		 # psnr: 37.1974	 # ssim: 0.9668
+2024-12-09 08:46:29,076 INFO: [rice2..][epoch:999, iter:  36,000, lr:(3.465e-06,)] [eta: 0:15:46, time (data): 0.897 (0.002)] l_pix: 8.3993e-03 
+2024-12-09 08:46:29,163 INFO: Saving models and training states.
+2024-12-09 08:46:41,904 INFO: Validation ValSet,		 # psnr: 37.2242	 # ssim: 0.9668
+2024-12-09 09:02:31,913 INFO: [rice2..][epoch:1027, iter:  37,000, lr:(2.000e-06,)] [eta: 0:00:00, time (data): 0.897 (0.001)] l_pix: 1.1782e-02 
+2024-12-09 09:02:32,051 INFO: Saving models and training states.
+2024-12-09 09:02:51,947 INFO: Validation ValSet,		 # psnr: 37.1946	 # ssim: 0.9668
+2024-12-09 09:02:52,012 INFO: End of training. Time consumed: 9:44:39
+2024-12-09 09:02:52,012 INFO: Save the latest model.
+2024-12-09 09:03:03,532 INFO: Validation ValSet,		 # psnr: 37.1946	 # ssim: 0.9668

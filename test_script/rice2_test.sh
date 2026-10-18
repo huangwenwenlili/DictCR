@@ -1,0 +1,1 @@
+CUDA_VISIBLE_DEVICES=0 python  test/test.py --opt ./cloud_removal_opt/rice2-dict.yml --weights experiments/rice2/net_rice2_best.pth --input_dir datasets/RICE2/test/cloud  --input_truth_dir datasets/RICE2/test/reference/ --result_dir output/rice2-test
