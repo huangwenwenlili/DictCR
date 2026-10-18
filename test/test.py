@@ -21,16 +21,7 @@ import sys
 import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# from basicsr.models.archs.linear_attntion_relu import Restormer
-# from basicsr.models.archs.linear_attntion_softmax_conv import Restormer
-# from basicsr.models.archs.linear_attn_add_pos_v3 import Restormer
-# from basicsr.models.archs.swin_transformer_sparse import Restormer
-# from basicsr.models.archs.swin_transformer import Restormer
-from basicsr.models.archs.restormer_arch_sparse_norm import Restormer
-from basicsr.models.archs.strip_swa_dict_restomerFFN_tiny_new1 import Restormer
-#from basicsr.models.archs.swin_transformer_sparse_2 import Restormers
-# from basicsr.models.archs.atttn_GDC import Restormer
-# from basicsr.models.archs.linear_attntion_softmax_new import Restormer
+from basicsr.models.archs.dictcr import Restormer
 now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -96,23 +87,6 @@ def save_gray_img(filepath, img):
 
 def get_weights_and_parameters(task, parameters):
     if task == 'Deraining':
-        #weights = os.path.join('pretrained_models', 'deraining.pth')
-        # weights = os.path.join('experiments/512/Deraining_attn_Restormer_global_rice2_linearmorm_new_v_v_sum_512_500/models', 'net_g_147000.pth')
-        # weights = os.path.join('experiments/256/Deraining_attn_Restormer_global_t_cloud_linear_norm_add_pos_300_epoch/models', 'net_g_346920.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice2_linearmorm_512_500/models', 'net_g_145000.pth')#
-        # weights = os.path.join ('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_no_scal_relu/models', 'net_g_92000.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_no_scal_relu_add_v_inside/models', 'net_g_94000.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice2_linearmorm_512_500_add_v_v_sum_add_pose/models', 'net_g_147000.pth')
-        # weights = os.path.join('experiments/512/add_dwconv/Deraining_attn_Restormer_global_rice1_linearmorm_512_new_softmax_no_scal_add_locl/models', 'net_g_100000.pth')
-        # weights = os.path.join('experiments/256/Deraining_attn_Restormer_global_t_cloud_linear_norm_new_long_1_300_epoch_relu/models', 'net_g_323400.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_500_add_v_sum_pose/models', 'net_g_99000.pth')
-        # weights = os.path.join('experiments/512/Deraining_attn_Restormer_global_rice1_linearmorm_512_new_softmax_no_scal_add_v_v_sum_inside/models', 'net_g_99000.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_new_softmax_no_scal/models',  'net_g_98000.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_500_new_softmax_scale/models',  'net_g_100000.pth')
-        #  weights = os.path.join('experiments/Deraining_attn_Restormer_global_t_cloud_linear_norm_new_long_1_300_epoch_new_add_v_v_sum/models',  'net_g_335160.pth')
-        # weights = os.path.join('experiments/256/Deraining_attn_Restormer_global_t_cloud_linear_norm_new_long_1_300_epoch_relu/models',  'net_g_323400.pth')
-        #  weights = os.path.join('experiments/Deraining_attn_Restormer_global_GDC_attn_512_500/models','net_g_98000.pth')
-        # weights = os.path.join('experiments/Deraining_attn_Restormer_global_rice1_linearmorm_512_softmax_p=2_no_v_only_v-sum/models', 'net_g_100000.pth')
         weights = os.path.join('./experiments/rice1_dict_tiny_new1_tokens128/models/', 'net_g_25000.pth')
     return weights, parameters
 

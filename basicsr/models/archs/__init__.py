@@ -14,40 +14,7 @@ arch_folder = osp.dirname(osp.abspath(__file__))
 
 arch_filenames = [
     osp.splitext(osp.basename(v))[0] for v in scandir(arch_folder)
-    # if v.endswith('strip_swa_atd_ResFFN_tiny.py')
-    # if v.endswith('strip_swa_atd_laststage_convFFN_tiny.py')
-    # if v.endswith('strip_swa_atd_rech4_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_nodwc_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_noposbias_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_noposbiasDWC_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_diffnum_noposbiasDWC_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_proj_noposbiasDWC_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_proj_noposbiasDWC_parallel_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_proj_noposbiasDWC_DFE_parallel_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_proj_noposbiasDWC_HAI_parallel_convFFN_tiny.py')
-    # if v.endswith('strip_swa_multiscale_convFFN_tiny.py')
-    # if v.endswith('strip_swa_agent_proj_noposbiasDWC_parallel2_HAI_convFFN_tiny.py')
-    # if v.endswith('strip_swa_anchor_convFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_convFFN_tiny.py')
-    # if v.endswith('dict_mlp_only_convFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_mlp_convFFN_tiny.py')
-    # if v.endswith('atdpaper_convFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_mlp_parallel_convFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_mlp_gateFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_small.py')
-    #####dict cr model
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks7.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks7_reducedwcq.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks7_reducemixmlp.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks7_reducedwcq_mixmlp.py')
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks3_multirectsa.py')
-
-    # if v.endswith('strip_swa_dict_mlp_restomerFFN_tiny_stage3_inoutks3_multirectsa_nodwcq_initdict.py')
-    # if v.endswith('strip_swa_atd_restomerFFN_tiny_stage3_inoutks3.py')
-
-    ###ssim test on torch 1.8.1 ,2.1.1 donot 2.4
-    if v.endswith('strip_swa_dict_restomerFFN_tiny_new1.py')
+    if v.endswith('dictcr.py')
 
 
 ]
