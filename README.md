@@ -2,7 +2,7 @@
 
 Wenli Huang, Yang Wu, Sanping Zhou, Xiaomeng Xin, Xiaobo Jia, Ping Yu, Ye Deng, 2026
 
-![Paper](![Paper](figs/DictCR-PR.pdf)
+![Paper](![Paper](figs/DictCR-PR.pdf))
 
 ## Abstract
 
